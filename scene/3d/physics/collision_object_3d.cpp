@@ -481,6 +481,7 @@ void CollisionObject3D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("shape_owner_set_transform", "owner_id", "transform"), &CollisionObject3D::shape_owner_set_transform);
 	ClassDB::bind_method(D_METHOD("shape_owner_get_transform", "owner_id"), &CollisionObject3D::shape_owner_get_transform);
 	ClassDB::bind_method(D_METHOD("shape_owner_get_owner", "owner_id"), &CollisionObject3D::shape_owner_get_owner);
+	ClassDB::bind_method(D_METHOD("shape_owner_set_mass", "owner_id","mass"), &CollisionObject3D::shape_owner_set_mass);
 	ClassDB::bind_method(D_METHOD("shape_owner_set_disabled", "owner_id", "disabled"), &CollisionObject3D::shape_owner_set_disabled);
 	ClassDB::bind_method(D_METHOD("is_shape_owner_disabled", "owner_id"), &CollisionObject3D::is_shape_owner_disabled);
 	ClassDB::bind_method(D_METHOD("shape_owner_add_shape", "owner_id", "shape"), &CollisionObject3D::shape_owner_add_shape);
@@ -538,6 +539,22 @@ void CollisionObject3D::remove_shape_owner(uint32_t owner) {
 	shape_owner_clear_shapes(owner);
 
 	shapes.erase(owner);
+}
+
+void CollisionObject3D::shape_owner_set_mass(uint32_t p_owner, real_t p_mass) {
+	ERR_FAIL_COND(!shapes.has(p_owner));
+	ShapeData &sd = shapes[p_owner];
+	if (sd.mass == p_mass) {
+		return;
+	}
+	sd.mass = p_mass;
+	if (!area) {
+		for (int i = 0; i < sd.shapes.size(); i++) {
+			PhysicsServer3D::get_singleton()->body_set_shape_mass(rid, sd.shapes[i].index, p_mass);
+		}
+	}
+	_update_shape_data(p_owner);
+
 }
 
 void CollisionObject3D::shape_owner_set_disabled(uint32_t p_owner, bool p_disabled) {

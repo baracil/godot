@@ -72,6 +72,7 @@ void CollisionPolygon3D::_build_polygon() {
 		convex->set_margin(margin);
 		collision_object->shape_owner_add_shape(owner_id, convex);
 		collision_object->shape_owner_set_disabled(owner_id, disabled);
+		collision_object->shape_owner_set_mass(owner_id, mass);
 	}
 }
 
@@ -81,6 +82,7 @@ void CollisionPolygon3D::_update_in_shape_owner(bool p_xform_only) {
 		return;
 	}
 	collision_object->shape_owner_set_disabled(owner_id, disabled);
+	collision_object->shape_owner_set_mass(owner_id, mass);
 }
 
 void CollisionPolygon3D::_notification(int p_what) {

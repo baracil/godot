@@ -47,6 +47,7 @@ protected:
 	uint32_t owner_id = 0;
 	CollisionObject3D *collision_object = nullptr;
 
+    real_t mass = 1.0;
 	bool disabled = false;
 
 	void _build_polygon();

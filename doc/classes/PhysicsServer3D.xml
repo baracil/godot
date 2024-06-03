@@ -273,6 +273,7 @@
 			<param index="1" name="shape" type="RID" />
 			<param index="2" name="transform" type="Transform3D" default="Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)" />
 			<param index="3" name="disabled" type="bool" default="false" />
+			<param index="4" name="mass" type="float" default="1" />
 			<description>
 				Adds a shape to the body, along with a transform matrix. Shapes are usually referenced by their index, so you should track which shape has a given index.
 			</description>
@@ -649,6 +650,14 @@
 			<param index="0" name="body" type="RID" />
 			<param index="1" name="shape_idx" type="int" />
 			<param index="2" name="disabled" type="bool" />
+			<description>
+			</description>
+		</method>
+		<method name="body_set_shape_mass">
+			<return type="void" />
+			<param index="0" name="body" type="RID" />
+			<param index="1" name="shape_idx" type="int" />
+			<param index="2" name="mass" type="float" />
 			<description>
 			</description>
 		</method>

@@ -83,6 +83,7 @@ class GodotBody3D : public GodotCollisionObject3D {
 	Basis principal_inertia_axes;
 	Vector3 center_of_mass;
 
+	bool uniform_mass_distribution = true;
 	bool calculate_inertia = true;
 	bool calculate_center_of_mass = true;
 

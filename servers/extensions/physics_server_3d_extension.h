@@ -295,10 +295,11 @@ public:
 	EXBIND2(body_set_mode, RID, BodyMode)
 	EXBIND1RC(BodyMode, body_get_mode, RID)
 
-	EXBIND4(body_add_shape, RID, RID, const Transform3D &, bool)
+	EXBIND5(body_add_shape, RID, RID, const Transform3D &, bool, real_t)
 	EXBIND3(body_set_shape, RID, int, RID)
 	EXBIND3(body_set_shape_transform, RID, int, const Transform3D &)
 	EXBIND3(body_set_shape_disabled, RID, int, bool)
+	EXBIND3(body_set_shape_mass, RID, int, real_t)
 
 	EXBIND1RC(int, body_get_shape_count, RID)
 	EXBIND2RC(RID, body_get_shape, RID, int)

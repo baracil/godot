@@ -68,6 +68,7 @@ private:
 		};
 
 		Vector<ShapeBase> shapes;
+        real_t mass = 1;
 		bool disabled = false;
 	};
 
@@ -151,6 +152,8 @@ public:
 	void shape_owner_set_transform(uint32_t p_owner, const Transform3D &p_transform);
 	Transform3D shape_owner_get_transform(uint32_t p_owner) const;
 	Object *shape_owner_get_owner(uint32_t p_owner) const;
+
+    void shape_owner_set_mass(uint32_t p_owner, real_t p_mass);
 
 	void shape_owner_set_disabled(uint32_t p_owner, bool p_disabled);
 	bool is_shape_owner_disabled(uint32_t p_owner) const;

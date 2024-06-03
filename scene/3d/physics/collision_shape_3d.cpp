@@ -76,6 +76,7 @@ void CollisionShape3D::_update_in_shape_owner(bool p_xform_only) {
 		return;
 	}
 	collision_object->shape_owner_set_disabled(owner_id, disabled);
+	collision_object->shape_owner_set_mass(owner_id, mass);
 }
 
 void CollisionShape3D::_notification(int p_what) {
@@ -164,6 +165,8 @@ void CollisionShape3D::_bind_methods() {
 #endif
 	ClassDB::bind_method(D_METHOD("set_shape", "shape"), &CollisionShape3D::set_shape);
 	ClassDB::bind_method(D_METHOD("get_shape"), &CollisionShape3D::get_shape);
+	ClassDB::bind_method(D_METHOD("set_mass", "mass"), &CollisionShape3D::set_mass);
+	ClassDB::bind_method(D_METHOD("get_mass"), &CollisionShape3D::get_mass);
 	ClassDB::bind_method(D_METHOD("set_disabled", "enable"), &CollisionShape3D::set_disabled);
 	ClassDB::bind_method(D_METHOD("is_disabled"), &CollisionShape3D::is_disabled);
 	ClassDB::bind_method(D_METHOD("make_convex_from_siblings"), &CollisionShape3D::make_convex_from_siblings);
@@ -171,6 +174,7 @@ void CollisionShape3D::_bind_methods() {
 
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "shape", PROPERTY_HINT_RESOURCE_TYPE, "Shape3D"), "set_shape", "get_shape");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "disabled"), "set_disabled", "is_disabled");
+	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "mass"), "set_mass", "get_mass");
 }
 
 void CollisionShape3D::set_shape(const Ref<Shape3D> &p_shape) {
@@ -201,6 +205,17 @@ void CollisionShape3D::set_shape(const Ref<Shape3D> &p_shape) {
 
 Ref<Shape3D> CollisionShape3D::get_shape() const {
 	return shape;
+}
+
+void CollisionShape3D::set_mass(real_t p_mass) {
+    mass = p_mass;
+    if (collision_object) {
+        collision_object->shape_owner_set_mass(owner_id, p_mass);
+    }
+}
+
+real_t CollisionShape3D::get_mass() const {
+    return mass;
 }
 
 void CollisionShape3D::set_disabled(bool p_disabled) {

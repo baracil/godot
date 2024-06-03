@@ -57,28 +57,42 @@ void GodotBody3D::update_mass_properties() {
 
 	switch (mode) {
 		case PhysicsServer3D::BODY_MODE_RIGID: {
-			real_t total_area = 0;
-			for (int i = 0; i < get_shape_count(); i++) {
-				if (is_shape_disabled(i)) {
-					continue;
-				}
+			real_t total = 0;
+			if (uniform_mass_distribution) {
+				for (int i = 0; i < get_shape_count(); i++) {
+					if (is_shape_disabled(i)) {
+						continue;
+					}
 
-				total_area += get_shape_area(i);
+					total += get_shape_area(i);
+				}
+			} else {
+				for (int i = 0; i < get_shape_count(); i++) {
+					if (is_shape_disabled(i)) {
+						continue;
+					}
+					total += get_shape_mass(i);
+				}
+				mass = total;
 			}
 
 			if (calculate_center_of_mass) {
 				// We have to recompute the center of mass.
 				center_of_mass_local.zero();
 
-				if (total_area != 0.0) {
+				if (total != 0.0) {
 					for (int i = 0; i < get_shape_count(); i++) {
 						if (is_shape_disabled(i)) {
 							continue;
 						}
+						real_t mass_new = 0;
+						if (uniform_mass_distribution) {
+							real_t area = get_shape_area(i);
+							mass_new = area * mass / total;
+						} else {
+							mass_new = get_shape_mass(i);
+						}
 
-						real_t area = get_shape_area(i);
-
-						real_t mass_new = area * mass / total_area;
 
 						// NOTE: we assume that the shape origin is also its center of mass.
 						center_of_mass_local += mass_new * get_shape_transform(i).origin;
@@ -99,16 +113,21 @@ void GodotBody3D::update_mass_properties() {
 						continue;
 					}
 
-					real_t area = get_shape_area(i);
-					if (area == 0.0) {
-						continue;
+					real_t mass_new = 0;
+					if (uniform_mass_distribution) {
+						real_t area = get_shape_area(i);
+						if (area == 0.0) {
+							continue;
+						}
+						mass_new = area * mass / total;
+					} else {
+						mass_new = get_shape_mass(i);
 					}
 
 					inertia_set = true;
 
 					const GodotShape3D *shape = get_shape(i);
 
-					real_t mass_new = area * mass / total_area;
 
 					Basis shape_inertia_tensor = Basis::from_scale(shape->get_moment_of_inertia(mass_new));
 					Transform3D shape_transform = get_shape_transform(i);
@@ -231,6 +250,10 @@ void GodotBody3D::set_param(PhysicsServer3D::BodyParameter p_param, const Varian
 				wakeup();
 			}
 			gravity_scale = p_value;
+		} break;
+		case PhysicsServer3D::BODY_PARAM_MASS_DISTRIBUTION_MODE: {
+			int mode_value = p_value;
+			uniform_mass_distribution = ((PhysicsServer3D::BodyMassDistributionMode)mode_value) == PhysicsServer3D::MASS_DISTRIBUTION_MODE_UNIFORM;
 		} break;
 		case PhysicsServer3D::BODY_PARAM_LINEAR_DAMP_MODE: {
 			int mode_value = p_value;

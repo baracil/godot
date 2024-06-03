@@ -771,10 +771,11 @@ void PhysicsServer3D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("body_set_collision_priority", "body", "priority"), &PhysicsServer3D::body_set_collision_priority);
 	ClassDB::bind_method(D_METHOD("body_get_collision_priority", "body"), &PhysicsServer3D::body_get_collision_priority);
 
-	ClassDB::bind_method(D_METHOD("body_add_shape", "body", "shape", "transform", "disabled"), &PhysicsServer3D::body_add_shape, DEFVAL(Transform3D()), DEFVAL(false));
+	ClassDB::bind_method(D_METHOD("body_add_shape", "body", "shape", "transform", "disabled","mass"), &PhysicsServer3D::body_add_shape, DEFVAL(Transform3D()), DEFVAL(false), DEFVAL(1.0));
 	ClassDB::bind_method(D_METHOD("body_set_shape", "body", "shape_idx", "shape"), &PhysicsServer3D::body_set_shape);
 	ClassDB::bind_method(D_METHOD("body_set_shape_transform", "body", "shape_idx", "transform"), &PhysicsServer3D::body_set_shape_transform);
 	ClassDB::bind_method(D_METHOD("body_set_shape_disabled", "body", "shape_idx", "disabled"), &PhysicsServer3D::body_set_shape_disabled);
+	ClassDB::bind_method(D_METHOD("body_set_shape_mass", "body", "shape_idx", "mass"), &PhysicsServer3D::body_set_shape_mass);
 
 	ClassDB::bind_method(D_METHOD("body_get_shape_count", "body"), &PhysicsServer3D::body_get_shape_count);
 	ClassDB::bind_method(D_METHOD("body_get_shape", "body", "shape_idx"), &PhysicsServer3D::body_get_shape);

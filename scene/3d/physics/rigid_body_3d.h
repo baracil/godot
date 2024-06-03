@@ -42,6 +42,11 @@ public:
 		FREEZE_MODE_KINEMATIC,
 	};
 
+	enum MassDistributionMode {
+		MASS_DISTRIBUTION_MODE_UNIFORM,
+		MASS_DISTRIBUTION_MODE_NON_UNIFORM
+	};
+
 	enum CenterOfMassMode {
 		CENTER_OF_MASS_MODE_AUTO,
 		CENTER_OF_MASS_MODE_CUSTOM,
@@ -57,6 +62,8 @@ private:
 	bool lock_rotation = false;
 	bool freeze = false;
 	FreezeMode freeze_mode = FREEZE_MODE_STATIC;
+
+	MassDistributionMode mass_distribution_mode = MASS_DISTRIBUTION_MODE_UNIFORM;
 
 	real_t mass = 1.0;
 	Vector3 inertia;
@@ -151,6 +158,9 @@ public:
 	void set_freeze_mode(FreezeMode p_freeze_mode);
 	FreezeMode get_freeze_mode() const;
 
+	void set_mass_distribution_mode(MassDistributionMode p_mass_distribution_mode);
+	MassDistributionMode get_mass_distribution_mode() const;
+
 	void set_mass(real_t p_mass);
 	real_t get_mass() const;
 
@@ -244,5 +254,6 @@ private:
 VARIANT_ENUM_CAST(RigidBody3D::FreezeMode);
 VARIANT_ENUM_CAST(RigidBody3D::CenterOfMassMode);
 VARIANT_ENUM_CAST(RigidBody3D::DampMode);
+VARIANT_ENUM_CAST(RigidBody3D::MassDistributionMode);
 
 #endif // RIGID_BODY_3D_H

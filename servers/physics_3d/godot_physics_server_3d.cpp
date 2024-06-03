@@ -489,7 +489,7 @@ PhysicsServer3D::BodyMode GodotPhysicsServer3D::body_get_mode(RID p_body) const 
 	return body->get_mode();
 };
 
-void GodotPhysicsServer3D::body_add_shape(RID p_body, RID p_shape, const Transform3D &p_transform, bool p_disabled) {
+void GodotPhysicsServer3D::body_add_shape(RID p_body, RID p_shape, const Transform3D &p_transform, bool p_disabled, real_t p_mass) {
 	GodotBody3D *body = body_owner.get_or_null(p_body);
 	ERR_FAIL_NULL(body);
 
@@ -540,6 +540,15 @@ void GodotPhysicsServer3D::body_set_shape_disabled(RID p_body, int p_shape_idx, 
 	FLUSH_QUERY_CHECK(body);
 
 	body->set_shape_disabled(p_shape_idx, p_disabled);
+}
+
+void GodotPhysicsServer3D::body_set_shape_mass(RID p_body, int p_shape_idx, real_t p_mass) {
+	GodotBody3D *body = body_owner.get_or_null(p_body);
+	ERR_FAIL_COND(!body);
+	ERR_FAIL_INDEX(p_shape_idx, body->get_shape_count());
+	FLUSH_QUERY_CHECK(body);
+
+	body->set_shape_mass(p_shape_idx, p_mass);
 }
 
 Transform3D GodotPhysicsServer3D::body_get_shape_transform(RID p_body, int p_shape_idx) const {

@@ -46,6 +46,7 @@ class CollisionShape3D : public Node3D {
 #ifndef DISABLE_DEPRECATED
 	void resource_changed(Ref<Resource> res);
 #endif
+    real_t mass = 1.;
 	bool disabled = false;
 
 protected:
@@ -60,6 +61,9 @@ public:
 
 	void set_shape(const Ref<Shape3D> &p_shape);
 	Ref<Shape3D> get_shape() const;
+
+	void set_mass(real_t p_mass);
+	real_t get_mass() const;
 
 	void set_disabled(bool p_disabled);
 	bool is_disabled() const;

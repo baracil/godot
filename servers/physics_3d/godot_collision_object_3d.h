@@ -68,6 +68,7 @@ private:
 		AABB aabb_cache; //for rayqueries
 		real_t area_cache = 0.0;
 		GodotShape3D *shape = nullptr;
+		real_t mass = 1.0;
 		bool disabled = false;
 	};
 
@@ -116,7 +117,7 @@ public:
 	void _shape_changed() override;
 
 	_FORCE_INLINE_ Type get_type() const { return type; }
-	void add_shape(GodotShape3D *p_shape, const Transform3D &p_transform = Transform3D(), bool p_disabled = false);
+	void add_shape(GodotShape3D *p_shape, const Transform3D &p_transform = Transform3D(), bool p_disabled = false, real_t p_mass = 1.0);
 	void set_shape(int p_index, GodotShape3D *p_shape);
 	void set_shape_transform(int p_index, const Transform3D &p_transform);
 	_FORCE_INLINE_ int get_shape_count() const { return shapes.size(); }
@@ -152,6 +153,11 @@ public:
 	_FORCE_INLINE_ bool is_shape_disabled(int p_idx) const {
 		ERR_FAIL_INDEX_V(p_idx, shapes.size(), false);
 		return shapes[p_idx].disabled;
+	}
+	void set_shape_mass(int p_idx, real_t p_mass);
+	_FORCE_INLINE_ real_t get_shape_mass(int p_index) const {
+		CRASH_BAD_INDEX(p_index, shapes.size());
+		return shapes[p_index].mass;
 	}
 
 	_FORCE_INLINE_ void set_collision_layer(uint32_t p_layer) {

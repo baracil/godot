@@ -390,6 +390,11 @@ public:
 		BODY_MODE_RIGID_LINEAR,
 	};
 
+	enum BodyMassDistributionMode {
+		MASS_DISTRIBUTION_MODE_UNIFORM,
+		MASS_DISTRIBUTION_MODE_NON_UNIFORM
+	};
+
 	enum BodyDampMode {
 		BODY_DAMP_MODE_COMBINE,
 		BODY_DAMP_MODE_REPLACE,
@@ -403,7 +408,7 @@ public:
 	virtual void body_set_mode(RID p_body, BodyMode p_mode) = 0;
 	virtual BodyMode body_get_mode(RID p_body) const = 0;
 
-	virtual void body_add_shape(RID p_body, RID p_shape, const Transform3D &p_transform = Transform3D(), bool p_disabled = false) = 0;
+	virtual void body_add_shape(RID p_body, RID p_shape, const Transform3D &p_transform = Transform3D(), bool p_disabled = false, real_t p_mass=1) = 0;
 	virtual void body_set_shape(RID p_body, int p_shape_idx, RID p_shape) = 0;
 	virtual void body_set_shape_transform(RID p_body, int p_shape_idx, const Transform3D &p_transform) = 0;
 
@@ -415,6 +420,7 @@ public:
 	virtual void body_clear_shapes(RID p_body) = 0;
 
 	virtual void body_set_shape_disabled(RID p_body, int p_shape_idx, bool p_disabled) = 0;
+	virtual void body_set_shape_mass(RID p_body, int p_shape_idx, real_t p_mass) = 0;
 
 	virtual void body_attach_object_instance_id(RID p_body, ObjectID p_id) = 0;
 	virtual ObjectID body_get_object_instance_id(RID p_body) const = 0;
@@ -442,6 +448,7 @@ public:
 		BODY_PARAM_INERTIA,
 		BODY_PARAM_CENTER_OF_MASS,
 		BODY_PARAM_GRAVITY_SCALE,
+		BODY_PARAM_MASS_DISTRIBUTION_MODE,
 		BODY_PARAM_LINEAR_DAMP_MODE,
 		BODY_PARAM_ANGULAR_DAMP_MODE,
 		BODY_PARAM_LINEAR_DAMP,

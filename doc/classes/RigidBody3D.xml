@@ -146,6 +146,9 @@
 			The body's custom center of mass, relative to the body's origin position, when [member center_of_mass_mode] is set to [constant CENTER_OF_MASS_MODE_CUSTOM]. This is the balanced point of the body, where applied forces only cause linear acceleration. Applying forces outside of the center of mass causes angular acceleration.
 			When [member center_of_mass_mode] is set to [constant CENTER_OF_MASS_MODE_AUTO] (default value), the center of mass is automatically computed.
 		</member>
+		<member name="mass_distribution_mode" type="int" setter="set_mass_distribution_mode" getter="get_mass_distribution_mode" enum="RigidBody3D.MassDistributionMode" default="0">
+			Defines the way the body's center of mass and inertia tensor is computed. See [enum MassDistributionMode] for possible values.
+		</member>
 		<member name="center_of_mass_mode" type="int" setter="set_center_of_mass_mode" getter="get_center_of_mass_mode" enum="RigidBody3D.CenterOfMassMode" default="0">
 			Defines the way the body's center of mass is set. See [enum CenterOfMassMode] for possible values.
 		</member>
@@ -289,6 +292,12 @@
 		</constant>
 		<constant name="FREEZE_MODE_KINEMATIC" value="1" enum="FreezeMode">
 			Kinematic body freeze mode. Similar to [constant FREEZE_MODE_STATIC], but collides with other bodies along its path when moved. Useful for a frozen body that needs to be animated.
+		</constant>
+		<constant name="MASS_DISTRIBUTION_MODE_UNIFORM" value="1" enum="MassDistributionMode">
+			In this mode, the body's center of mass and inertia is calculated automatically based on its shape volumes. This assumes that the shapes' origins are also their center of mass.
+		</constant>
+		<constant name="MASS_DISTRIBUTION_MODE_UNIFORM" value="1" enum="MassDistributionMode">
+			In this mode, the body's center of mass and inertia is calculated automatically based on its shape masses. This assumes that the shapes' origins are also their center of mass.
 		</constant>
 		<constant name="CENTER_OF_MASS_MODE_AUTO" value="0" enum="CenterOfMassMode">
 			In this mode, the body's center of mass is calculated automatically based on its shapes. This assumes that the shapes' origins are also their center of mass.

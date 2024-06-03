@@ -330,6 +330,23 @@ RigidBody3D::FreezeMode RigidBody3D::get_freeze_mode() const {
 	return freeze_mode;
 }
 
+void RigidBody3D::set_mass_distribution_mode(RigidBody3D::MassDistributionMode p_mass_distribution_mode) {
+	if (p_mass_distribution_mode == mass_distribution_mode) {
+		return;
+	}
+	mass_distribution_mode = p_mass_distribution_mode;
+	PhysicsServer3D::get_singleton()->body_set_param(get_rid(), PhysicsServer3D::BODY_PARAM_MASS_DISTRIBUTION_MODE, mass_distribution_mode);
+
+	if (center_of_mass_mode == CENTER_OF_MASS_MODE_AUTO) {
+		center_of_mass = Vector3();
+		PhysicsServer3D::get_singleton()->body_reset_mass_properties(get_rid());
+	}
+}
+
+RigidBody3D::MassDistributionMode RigidBody3D::get_mass_distribution_mode() const {
+	return mass_distribution_mode;
+}
+
 void RigidBody3D::set_mass(real_t p_mass) {
 	ERR_FAIL_COND(p_mass <= 0);
 	mass = p_mass;
@@ -676,6 +693,9 @@ void RigidBody3D::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_inertia", "inertia"), &RigidBody3D::set_inertia);
 	ClassDB::bind_method(D_METHOD("get_inertia"), &RigidBody3D::get_inertia);
 
+	ClassDB::bind_method(D_METHOD("set_mass_distribution_mode", "mode"), &RigidBody3D::set_mass_distribution_mode);
+	ClassDB::bind_method(D_METHOD("get_mass_distribution_mode"), &RigidBody3D::get_mass_distribution_mode);
+
 	ClassDB::bind_method(D_METHOD("set_center_of_mass_mode", "mode"), &RigidBody3D::set_center_of_mass_mode);
 	ClassDB::bind_method(D_METHOD("get_center_of_mass_mode"), &RigidBody3D::get_center_of_mass_mode);
 
@@ -764,8 +784,11 @@ void RigidBody3D::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "physics_material_override", PROPERTY_HINT_RESOURCE_TYPE, "PhysicsMaterial"), "set_physics_material_override", "get_physics_material_override");
 	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "gravity_scale", PROPERTY_HINT_RANGE, "-8,8,0.001,or_less,or_greater"), "set_gravity_scale", "get_gravity_scale");
 	ADD_GROUP("Mass Distribution", "");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "mass_distribution_mode", PROPERTY_HINT_ENUM, "Uniform,Non Uniform", PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_UPDATE_ALL_IF_MODIFIED), "set_mass_distribution_mode", "get_mass_distribution_mode");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "center_of_mass_mode", PROPERTY_HINT_ENUM, "Auto,Custom"), "set_center_of_mass_mode", "get_center_of_mass_mode");
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "center_of_mass", PROPERTY_HINT_RANGE, "-10,10,0.01,or_less,or_greater,suffix:m"), "set_center_of_mass", "get_center_of_mass");
+	ADD_LINKED_PROPERTY("mass_distribution_mode", "mass");
+	ADD_LINKED_PROPERTY("center_of_mass_mode", "center_of_mass");
 	ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "inertia", PROPERTY_HINT_RANGE, U"0,1000,0.01,or_greater,exp,suffix:kg\u22C5m\u00B2"), "set_inertia", "get_inertia");
 	ADD_GROUP("Deactivation", "");
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "sleeping"), "set_sleeping", "is_sleeping");
@@ -802,6 +825,9 @@ void RigidBody3D::_bind_methods() {
 	BIND_ENUM_CONSTANT(CENTER_OF_MASS_MODE_AUTO);
 	BIND_ENUM_CONSTANT(CENTER_OF_MASS_MODE_CUSTOM);
 
+	BIND_ENUM_CONSTANT(MASS_DISTRIBUTION_MODE_UNIFORM);
+	BIND_ENUM_CONSTANT(MASS_DISTRIBUTION_MODE_NON_UNIFORM);
+
 	BIND_ENUM_CONSTANT(DAMP_MODE_COMBINE);
 	BIND_ENUM_CONSTANT(DAMP_MODE_REPLACE);
 }
@@ -814,7 +840,24 @@ void RigidBody3D::_validate_property(PropertyInfo &p_property) const {
 	if (!contact_monitor && p_property.name == "max_contacts_reported") {
 		p_property.usage = PROPERTY_USAGE_NO_EDITOR;
 	}
+
+	if (mass_distribution_mode != MASS_DISTRIBUTION_MODE_UNIFORM) {
+		if (p_property.name == "mass") {
+			p_property.usage = PROPERTY_USAGE_NO_EDITOR;
+		}
+	}
+	if (mass_distribution_mode != MASS_DISTRIBUTION_MODE_UNIFORM) {
+		if (p_property.name == "mass") {
+			p_property.usage = PROPERTY_USAGE_NO_EDITOR;
+		}
+	}
+	if (mass_distribution_mode != MASS_DISTRIBUTION_MODE_UNIFORM) {
+		if (p_property.name == "mass") {
+			p_property.usage = PROPERTY_USAGE_NO_EDITOR;
+		}
+	}
 }
+
 
 RigidBody3D::RigidBody3D() :
 		PhysicsBody3D(PhysicsServer3D::BODY_MODE_RIGID) {

@@ -33,13 +33,14 @@
 #include "godot_physics_server_3d.h"
 #include "godot_space_3d.h"
 
-void GodotCollisionObject3D::add_shape(GodotShape3D *p_shape, const Transform3D &p_transform, bool p_disabled) {
+void GodotCollisionObject3D::add_shape(GodotShape3D *p_shape, const Transform3D &p_transform, bool p_disabled, real_t p_mass) {
 	Shape s;
 	s.shape = p_shape;
 	s.xform = p_transform;
 	s.xform_inv = s.xform.affine_inverse();
 	s.bpid = 0; //needs update
 	s.disabled = p_disabled;
+	s.mass = p_mass;
 	shapes.push_back(s);
 	p_shape->add_owner(this);
 
@@ -93,6 +94,25 @@ void GodotCollisionObject3D::set_shape_disabled(int p_idx, bool p_disabled) {
 		if (!pending_shape_update_list.in_list()) {
 			GodotPhysicsServer3D::godot_singleton->pending_shape_update_list.add(&pending_shape_update_list);
 		}
+	}
+}
+
+void GodotCollisionObject3D::set_shape_mass(int p_idx, real_t p_mass) {
+	ERR_FAIL_INDEX(p_idx, shapes.size());
+
+	GodotCollisionObject3D::Shape &shape = shapes.write[p_idx];
+	if (shape.mass == p_mass) {
+		return;
+	}
+
+	shape.mass = p_mass;
+
+	if (!space) {
+		return;
+	}
+
+	if (!pending_shape_update_list.in_list()) {
+		GodotPhysicsServer3D::godot_singleton->pending_shape_update_list.add(&pending_shape_update_list);
 	}
 }
 

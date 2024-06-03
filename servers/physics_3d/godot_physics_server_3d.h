@@ -170,7 +170,7 @@ public:
 	virtual void body_set_mode(RID p_body, BodyMode p_mode) override;
 	virtual BodyMode body_get_mode(RID p_body) const override;
 
-	virtual void body_add_shape(RID p_body, RID p_shape, const Transform3D &p_transform = Transform3D(), bool p_disabled = false) override;
+	virtual void body_add_shape(RID p_body, RID p_shape, const Transform3D &p_transform = Transform3D(), bool p_disabled = false, real_t p_mass=1) override;
 	virtual void body_set_shape(RID p_body, int p_shape_idx, RID p_shape) override;
 	virtual void body_set_shape_transform(RID p_body, int p_shape_idx, const Transform3D &p_transform) override;
 
@@ -179,6 +179,7 @@ public:
 	virtual Transform3D body_get_shape_transform(RID p_body, int p_shape_idx) const override;
 
 	virtual void body_set_shape_disabled(RID p_body, int p_shape_idx, bool p_disabled) override;
+	virtual void body_set_shape_mass(RID p_body, int p_shape_idx, real_t p_mass) override;
 
 	virtual void body_remove_shape(RID p_body, int p_shape_idx) override;
 	virtual void body_clear_shapes(RID p_body) override;
